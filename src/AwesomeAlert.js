@@ -109,7 +109,7 @@ export default class AwesomeAlert extends Component {
         <View style={[styles.button, { backgroundColor }, buttonStyle]}>
           {
             isLoading?
-              <ActivityIndicator color={buttonTextStyle.color || styles.buttonText.color}/> :
+              <ActivityIndicator color={buttonTextStyle?.color || styles.buttonText.color}/> :
               <Text style={[styles.buttonText, buttonTextStyle]}>{text}</Text>
           }
         </View>
