@@ -27,7 +27,7 @@ export default class AwesomeAlert extends Component {
     this.springValue = new Animated.Value(props.animatedValue);
 
     this.state = {
-      showSelf: false,
+      showSelf: false
     };
 
     if (show) this._springShow(true);
@@ -100,12 +100,18 @@ export default class AwesomeAlert extends Component {
       buttonStyle,
       buttonTextStyle,
       onPress,
+      isLoading,
+      isDisableBtn
     } = data;
 
     return (
-      <TouchableOpacity testID={testID} onPress={onPress}>
+      <TouchableOpacity testID={testID} onPress={isDisableBtn ? () => {} : onPress}>
         <View style={[styles.button, { backgroundColor }, buttonStyle]}>
-          <Text style={[styles.buttonText, buttonTextStyle]}>{text}</Text>
+          {
+            isLoading?
+              <ActivityIndicator color={buttonTextStyle.color || styles.buttonText.color}/> :
+              <Text style={[styles.buttonText, buttonTextStyle]}>{text}</Text>
+          }
         </View>
       </TouchableOpacity>
     );
@@ -124,7 +130,8 @@ export default class AwesomeAlert extends Component {
       cancelButtonStyle,
       cancelButtonTextStyle,
       onCancelPressed,
-      cancelButtonTestID
+      cancelButtonTestID,
+      isCancelLoading,
     } = this.props;
 
     const {
@@ -134,7 +141,8 @@ export default class AwesomeAlert extends Component {
       confirmButtonStyle,
       confirmButtonTextStyle,
       onConfirmPressed,
-      confirmButtonTestID
+      confirmButtonTestID,
+      isConfirmLoading,
     } = this.props;
 
     const {
@@ -149,6 +157,8 @@ export default class AwesomeAlert extends Component {
       actionContainerStyle,
     } = this.props;
 
+    const isDisableBtn = isCancelLoading || isConfirmLoading;
+
     const cancelButtonData = {
       testID: cancelButtonTestID,
       text: cancelText,
@@ -156,6 +166,8 @@ export default class AwesomeAlert extends Component {
       buttonStyle: cancelButtonStyle,
       buttonTextStyle: cancelButtonTextStyle,
       onPress: onCancelPressed,
+      isDisableBtn,
+      isLoading: isCancelLoading,
     };
 
     const confirmButtonData = {
@@ -165,6 +177,8 @@ export default class AwesomeAlert extends Component {
       buttonStyle: confirmButtonStyle,
       buttonTextStyle: confirmButtonTextStyle,
       onPress: onConfirmPressed,
+      isDisableBtn,
+      isLoading: isConfirmLoading,
     };
 
     return (
@@ -245,6 +259,8 @@ AwesomeAlert.propTypes = {
   closeOnHardwareBackPress: PropTypes.bool,
   showCancelButton: PropTypes.bool,
   showConfirmButton: PropTypes.bool,
+  isCancelLoading: PropTypes.bool,
+  isConfirmLoading: PropTypes.bool,
   cancelText: PropTypes.string,
   confirmText: PropTypes.string,
   cancelButtonColor: PropTypes.string,
@@ -270,6 +286,8 @@ AwesomeAlert.defaultProps = {
   closeOnHardwareBackPress: true,
   showCancelButton: false,
   showConfirmButton: false,
+  isCancelLoading: false,
+  isConfirmLoading: false,
   cancelText: 'Cancel',
   confirmText: 'Confirm',
   cancelButtonColor: '#D0D0D0',
